@@ -22,7 +22,7 @@ export class UsersService {
       name: user.name,
       email: user.email,
       profilePhoto: null,
-      updatedAt: new Date(),
+      updatedAt: user.updatedAt,
     };
     if (user.profilePhoto) {
       const { fileName, mimeType } = user.profilePhoto;
