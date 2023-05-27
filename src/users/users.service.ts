@@ -7,6 +7,7 @@ import { IUserProfile, ImageMetadataInterface, UserInfoInterface } from './inter
 import { UploadService } from '../upload/upload.service';
 import { EntityEnum } from '../upload/enums/entity.enum';
 import { ImageStore } from '../upload/store/imageDump';
+import { ERROR } from '../common/messages/error.messages';
 
 @Injectable()
 export class UsersService {
@@ -53,7 +54,7 @@ export class UsersService {
     const user = Users.find((user: UserInfoInterface) => user.id === id);
 
     if (!user) {
-      throw new NotFoundException('User not found');
+      throw new NotFoundException(ERROR.USER.NOT_FOUND);
     }
 
     return user;
@@ -68,7 +69,7 @@ export class UsersService {
       doesNameExists = Users.find((user: UserInfoInterface) => user.name.toLowerCase() === name.toLowerCase());
 
       if (doesNameExists) {
-        throw new BadRequestException('Name already exists');
+        throw new BadRequestException(ERROR.USER.NAME_EXISTS);
       }
     }
 
@@ -76,7 +77,7 @@ export class UsersService {
       doesEmailExists = Users.find((user: UserInfoInterface) => user.email.toLowerCase() === email.toLowerCase());
 
       if (doesEmailExists) {
-        throw new BadRequestException('Email already exists');
+        throw new BadRequestException(ERROR.USER.EMAIL_EXISTS);
       }
     }
 
@@ -84,7 +85,7 @@ export class UsersService {
     if (imageId) {
       unassignedImage = ImageStore.find((image) => image.id === imageId);
       if (!unassignedImage) {
-        throw new BadRequestException('Invalid image provided for association');
+        throw new BadRequestException(ERROR.UPLOAD.NOT_FOUND);
       }
     }
 

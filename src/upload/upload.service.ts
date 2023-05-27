@@ -2,11 +2,11 @@ import { BadRequestException, Injectable, forwardRef, Inject } from '@nestjs/com
 import { uuid } from 'uuidv4';
 
 import { EntityEnum } from './enums/entity.enum';
-import { Users } from '../users/store/users';
-import { ImageMetadataInterface, UserInfoInterface } from '../users/interfaces';
+import { ImageMetadataInterface } from '../users/interfaces';
 import { UsersService } from '../users/users.service';
 import { ImageStore } from './store/imageDump';
 import { IImageInfo } from './interfaces';
+import { ERROR } from '../common/messages/error.messages';
 
 @Injectable()
 export class UploadService {
@@ -30,7 +30,7 @@ export class UploadService {
    */
   universalImageUploader(file: Express.Multer.File, entity: EntityEnum, entityId: string): string {
     if (!file) {
-      throw new BadRequestException('Upload an image to continue');
+      throw new BadRequestException(ERROR.UPLOAD.IMAGE_REQUIRED);
     }
 
     const uploadedImage: ImageMetadataInterface = {
@@ -49,7 +49,7 @@ export class UploadService {
           this.userService.updateUserInfo(entityId, uploadedImage);
           break;
         default:
-          throw new BadRequestException('Unknown entity');
+          throw new BadRequestException(ERROR.COMMON.UNKNOWN_ENTITY);
       }
     } else {
       // To be associated later on
